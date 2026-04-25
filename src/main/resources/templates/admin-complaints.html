@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Manage Complaints</title>
+
+    <style>
+        /* RESET */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* LAYOUT WRAPPER */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f6f9;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 250px;
+            background: #1f2937;
+            color: #fff;
+            padding: 25px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .sidebar h2 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #dbeafe;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .sidebar a {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 15px;
+            padding: 12px 14px;
+            border-radius: 6px;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover {
+            background: #374151;
+            color: white;
+        }
+
+        /* MAIN CONTENT AREA */
+        .content-area {
+            flex: 1;
+            padding: 30px;
+        }
+
+        /* PAGE CONTAINER */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* TITLE */
+        h1 {
+            color: #1f2937;
+            margin-bottom: 25px;
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        /* FILTER SECTION */
+        .filter-section {
+            background: white;
+            padding: 22px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e5e7eb;
+        }
+
+        .filter-section label {
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .filter-section select {
+            padding: 10px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .filter-section button {
+            padding: 10px 20px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .filter-section button:hover {
+            background: #1e40af;
+        }
+
+        .filter-section a {
+            padding: 10px 20px;
+            background: #6b7280;
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .filter-section a:hover {
+            background: #4b5563;
+        }
+
+        /* TABLE WRAPPER */
+        .table-wrapper {
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        /* TABLE HEADERS */
+        th {
+            background: #1f2937;
+            color: white;
+            padding: 16px 14px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* TABLE CELLS */
+        td {
+            padding: 14px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 14px;
+            color: #374151;
+        }
+
+        tr:hover {
+            background: #f9fafb;
+        }
+
+        /* STATUS BADGES */
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .status-pending {
+            background: #fde68a;
+            color: #92400e;
+        }
+
+        .status-in-process {
+            background: #bfdbfe;
+            color: #1e3a8a;
+        }
+
+        .status-closed {
+            background: #bbf7d0;
+            color: #065f46;
+        }
+
+        /* TRUNCATE */
+        .text-truncate {
+            max-width: 300px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* EDIT BUTTON */
+        .btn-edit {
+            padding: 8px 16px;
+            background: #059669;
+            color: white;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .btn-edit:hover {
+            background: #047857;
+        }
+
+        /* EMPTY MESSAGE */
+        .empty-message {
+            text-align: center;
+            padding: 60px;
+            color: #6b7280;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+
+        /* ALERT */
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <h2>Admin Panel</h2>
+        <a href="/complaints/admin/all">All Complaints</a>
+        <a href="/complaints/admin/pending">Pending</a>
+        <a href="/complaints/admin/in-process">In Process</a>
+        <a href="/complaints/admin/closed">Closed</a>
+    </div>
+
+    <!-- MAIN CONTENT AREA -->
+    <div class="content-area">
+        <div class="container">
+
+            <h1>Welcome to ABC Complaint Management System</h1>
+
+            <div th:if="${param.message == 'updated'}" class="alert alert-success">
+                ✓ Response updated successfully!
+            </div>
+
+            <div class="filter-section">
+                <form method="get" th:action="@{/complaints/admin/all}" style="display: flex; gap: 15px; align-items: center;">
+                    <label for="status">Filter by Status:</label>
+                    <select id="status" name="status">
+                        <option value="">All</option>
+                        <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}"
+                                th:selected="${s == selectedStatus}"></option>
+                    </select>
+                    <button type="submit">Filter</button>
+                    <a href="/complaints/admin/all">Reset</a>
+                </form>
+            </div>
+
+            <div th:if="${complaints.isEmpty()}" class="empty-message">
+                <p>No complaints found.</p>
+            </div>
+
+            <div th:if="${!complaints.isEmpty()}" class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>User Name</th>
+                            <th>Title</th>
+                            <th>Category</th>
+                            <th>Status</th>
+                            <th>Created</th>
+                            <th>Admin Response</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="complaint : ${complaints}">
+                            <td th:text="${complaint.id}"></td>
+                            <td th:text="${complaint.userName}"></td>
+                            <td class="text-truncate" th:text="${complaint.title}" th:title="${complaint.title}"></td>
+                            <td th:text="${complaint.category}"></td>
+                            <td>
+                                <span th:class="'status-badge status-' + ${complaint.status.toLowerCase().replace(' ', '-')}"
+                                      th:text="${complaint.status}"></span>
+                            </td>
+                            <td th:text="${#temporals.format(complaint.createdAt, 'dd/MM/yyyy HH:mm')}"></td>
+                            <td class="text-truncate"
+                                th:text="${complaint.adminResponse != null ? complaint.adminResponse : '⏳ Pending'}"
+                                th:title="${complaint.adminResponse}"></td>
+                            <td>
+                                <a th:href="@{/complaints/admin/update/{id}(id=${complaint.id})}" class="btn-edit">Update</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>

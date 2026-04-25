@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Complaint</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 28px;
+        }
+        
+        .form-group {
+            margin-bottom: 22px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 140px;
+        }
+        
+        .error {
+            color: #dc3545;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+        
+        .form-error input,
+        .form-error textarea,
+        .form-error select {
+            border-color: #dc3545;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+        }
+        
+        button {
+            flex: 1;
+            padding: 13px;
+            border: none;
+            border-radius: 5px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-submit {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-cancel {
+            background: #f0f0f0;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+        
+        .btn-cancel:hover {
+            background: #e0e0e0;
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📝 Create New Complaint</h1>
+        
+        <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+        <div th:if="${errorMessage}" class="alert alert-error" th:text="${errorMessage}"></div>
+        
+        <form th:action="@{/complaints/create}" th:object="${complaint}" method="post">
+            <div class="form-group" th:classappend="${#fields.hasErrors('userId') ? 'form-error' : ''}">
+                <label for="userId">User ID *</label>
+                <input type="number" id="userId" th:field="*{userId}" required>
+                <div class="error" th:if="${#fields.hasErrors('userId')}" th:errors="*{userId}"></div>
+            </div>
+            
+            <div class="form-group" th:classappend="${#fields.hasErrors('userName') ? 'form-error' : ''}">
+                <label for="userName">Full Name *</label>
+                <input type="text" id="userName" th:field="*{userName}" required>
+                <div class="error" th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}"></div>
+            </div>
+            
+            <div class="form-group" th:classappend="${#fields.hasErrors('title') ? 'form-error' : ''}">
+                <label for="title">Complaint Title *</label>
+                <input type="text" id="title" th:field="*{title}" placeholder="Brief title of your complaint" required>
+                <div class="error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
+            </div>
+            
+            <div class="form-group" th:classappend="${#fields.hasErrors('description') ? 'form-error' : ''}">
+                <label for="description">Description *</label>
+                <textarea id="description" th:field="*{description}" placeholder="Provide detailed description of your complaint" required></textarea>
+                <div class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
+            </div>
+            
+            <div class="form-group" th:classappend="${#fields.hasErrors('category') ? 'form-error' : ''}">
+                <label for="category">Category *</label>
+                <select id="category" th:field="*{category}" required>
+                    <option value="">-- Select Category --</option>
+                    <option th:each="cat : ${categories}" th:value="${cat}" th:text="${cat}"></option>
+                </select>
+                <div class="error" th:if="${#fields.hasErrors('category')}" th:errors="*{category}"></div>
+            </div>
+            
+            <div class="btn-group">
+                <button type="submit" class="btn-submit">Create Complaint</button>
+                <button type="reset" class="btn-cancel">Clear</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

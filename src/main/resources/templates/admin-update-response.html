@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Admin Response</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 28px;
+        }
+        
+        .complaint-info {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .info-item {
+            margin-bottom: 0;
+        }
+        
+        .info-item:last-child {
+            grid-column: 1 / -1;
+        }
+        
+        .info-label {
+            font-weight: 700;
+            color: #333;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+        
+        .info-value {
+            color: #555;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+        
+        .info-item.full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-in-process {
+            background: #cfe2ff;
+            color: #084298;
+        }
+        
+        .status-closed {
+            background: #d1e7dd;
+            color: #0f5132;
+        }
+        
+        .form-section {
+            margin-bottom: 25px;
+        }
+        
+        .section-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: #667eea;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .required {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        
+        textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        textarea:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 180px;
+        }
+        
+        .form-hint {
+            font-size: 12px;
+            color: #999;
+            margin-top: 6px;
+            font-style: italic;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 35px;
+        }
+        
+        button, .btn-cancel {
+            flex: 1;
+            padding: 13px;
+            border: none;
+            border-radius: 5px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .btn-submit {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+        }
+        
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(40, 167, 69, 0.4);
+        }
+        
+        .btn-cancel {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-cancel:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 5px;
+            padding: 12px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: #856404;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📝 Update Admin Response</h1>
+        
+        <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+        <div th:if="${errorMessage}" class="alert alert-error" th:text="${errorMessage}"></div>
+        
+        <!-- Complaint Information Section -->
+        <div class="complaint-info" th:if="${complaint}">
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">Complaint ID</div>
+                    <div class="info-value" th:text="${complaint.id}"></div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Status</div>
+                    <div class="info-value">
+                        <span th:class="'status-badge status-' + ${complaint.status.toLowerCase().replace(' ', '-')}" 
+                              th:text="${complaint.status}"></span>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">User</div>
+                    <div class="info-value" th:text="${complaint.userName}"></div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Category</div>
+                    <div class="info-value" th:text="${complaint.category}"></div>
+                </div>
+                <div class="info-item full-width">
+                    <div class="info-label">Title</div>
+                    <div class="info-value" th:text="${complaint.title}"></div>
+                </div>
+                <div class="info-item full-width">
+                    <div class="info-label">Description</div>
+                    <div class="info-value" th:text="${complaint.description}"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="warning-box">
+            ⚠️ <strong>Important:</strong> Only the "Admin Response" and "Status" fields can be edited. All complaint details are read-only.
+        </div>
+        
+        <!-- Update Form Section -->
+        <form th:action="@{/complaints/admin/update/{id}(id=${complaint.id})}" method="post">
+            <div class="form-section">
+                <div class="section-title">Editable Fields Only</div>
+                
+                <div class="form-group">
+                    <label for="status">Update Status <span class="required">*</span></label>
+                    <select id="status" name="status" required>
+                        <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}" 
+                                th:selected="${s == complaint.status}"></option>
+                    </select>
+                    <div class="form-hint">Select the current status of this complaint</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="adminResponse">Admin Response <span class="required">*</span></label>
+                    <textarea id="adminResponse" name="adminResponse" required 
+                              placeholder="Provide your response to the user's complaint...">[[${complaint.adminResponse}]]</textarea>
+                    <div class="form-hint">This is the only content field that can be edited</div>
+                </div>
+            </div>
+            
+            <div class="btn-group">
+                <button type="submit" class="btn-submit">✓ Update Response</button>
+                <a href="/complaints/admin/all" class="btn-cancel">✕ Cancel</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
