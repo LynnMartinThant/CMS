@@ -41,9 +41,7 @@ public class AuditLoggingService {
     private static final Logger logger = Logger.getLogger(AuditLoggingService.class.getName());
 
     @Autowired
-    private AuditLogRepository auditLogRepository; // // Complaint creation auditLoggingService.logComplaintCreated(userId, tenantId, complaintId, "Complaint: Network Issue");
-
-    /**
+    private AuditLogRepository auditLogRepository; 
      * Log a generic action with all details
      */
     public AuditLog logAction(Integer userId, Integer tenantId, String actionType,
@@ -118,29 +116,10 @@ public class AuditLoggingService {
                  "Login attempt for user: " + username, successful ? "SUCCESS" : "FAILURE");
     }
 
-    /**
-     * Log authorization failure
-     */
-    public void logAuthorizationFailure(Integer userId, Integer tenantId, String resource) {
-        logAction(userId, tenantId, "AUTHORIZE", "SYSTEM", null,
-                 "Unauthorized access attempt to: " + resource, "FAILURE");
-    }
+  
 
-    /**
-     * Log admin privilege escalation or role changes
-     */
-    public void logPrivilegeChange(Integer userId, Integer tenantId, UUID targetUserId, String newRole) {
-        logAction(userId, tenantId, "UPDATE", "USER", targetUserId,
-                 "User role changed to: " + newRole, "SUCCESS");
-    }
 
-    /**
-     * Log data export or bulk operations
-     */
-    public void logDataExport(Integer userId, Integer tenantId, String exportType, int recordCount) {
-        logAction(userId, tenantId, "EXPORT", "COMPLAINT", null,
-                 "Data export - type: " + exportType + ", records: " + recordCount, "SUCCESS");
-    }
+  
 
     /**
      * Get audit logs for a specific user
@@ -177,30 +156,5 @@ public class AuditLoggingService {
         return auditLogRepository.findFailedAuditLogs("FAILURE", tenantId);
     }
 
-    /**
-     * Extract client IP address from HTTP request
-     * Handles proxy scenarios
-     */
-    private String getClientIpAddress() {
-        try {
-            HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
-                    .getRequest();
-
-            String xForwardedFor = request.getHeader("X-Forwarded-For");
-            if (xForwardedFor != null && !xForwardedFor.isEmpty()) {
-                // X-Forwarded-For can contain multiple IPs, get the first one
-                return xForwardedFor.split(",")[0].trim();
-            }
-
-            String xRealIp = request.getHeader("X-Real-IP");
-            if (xRealIp != null && !xRealIp.isEmpty()) {
-                return xRealIp;
-            }
-
-            return request.getRemoteAddr();
-        } catch (Exception e) {
-            logger.warning(() -> "Could not extract client IP: " + e.getMessage());
-            return "UNKNOWN";
-        }
-    }
+   
 }
