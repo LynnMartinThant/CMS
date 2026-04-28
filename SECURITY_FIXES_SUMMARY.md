@@ -520,30 +520,7 @@ curl -k https://localhost:8443/complaints
 
 ---
 
-## Additional Security Recommendations
 
-### Short Term (Implement within 30 days):
-1. Implement rate limiting on login endpoint
-2. Add CSRF token validation to forms
-3. Enable SQL injection prevention via parameterized queries (already done via JPA)
-4. Implement input length validation on all forms
-5. Add security headers (Content-Security-Policy, X-Frame-Options, etc.)
-
-### Medium Term (Implement within 90 days):
-1. Implement two-factor authentication (2FA)
-2. Add IP whitelisting for admin access
-3. Implement session timeout and renewal
-4. Add encryption for sensitive fields at rest
-5. Set up automated security testing (OWASP ZAP, SonarQube)
-
-### Long Term (Implement within 6 months):
-1. Implement OAuth2/OIDC authentication
-2. Add API key management for third-party integrations
-3. Implement fine-grained permission system
-4. Add automated security audit and compliance reporting
-5. Implement backup and disaster recovery procedures
-
----
 
 ## References
 
