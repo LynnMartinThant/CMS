@@ -36,7 +36,7 @@ import jakarta.validation.constraints.NotBlank;
 )
  * 
  * Proof of Implementation:
- * 1. SecurityConfig.java → BCryptPasswordEncoder(12) bean configuration
+ * 1. SecurityConfig.java → BCryptPasswordEncoder(13) bean configuration
  * 2. UserService.java → registerUser() uses encoder.encode(plainPassword)
  * 3. UserService.java → authenticateUser() uses encoder.matches(raw, hash)
  * 
@@ -61,9 +61,9 @@ public class User {
     @Email(message = "Email should be valid")
     private String email;
 
-    /**
-     * SECURITY: Password field stores BCrypt-hashed passwords only.
-     */
+   
+     //SECURITY: Password field stores BCrypt-hashed passwords only.
+     
     @Column(nullable = false, length = 70)
     @NotBlank(message = "Password is required") // hash
     private String hashedPassword;
@@ -74,8 +74,6 @@ public class User {
     @Column(nullable = false)
     private Boolean active = true;
 
-    @Column(name = "last_login")
-    private LocalDateTime lastLogin;
 
 
 
