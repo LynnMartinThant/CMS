@@ -18,53 +18,23 @@ import java.util.UUID;
 
 /*
 **Audit Logging Points:**
-```java
+```java in Complaint Service
 // Complaint creation
-auditLoggingService.logComplaintCreated(userId, tenantId, complaintId, "Complaint: Network Issue");
+
 
 // Complaint read access
-auditLoggingService.logComplaintRead(userId, tenantId, complaintId);
+
 
 // Complaint modified
-auditLoggingService.logComplaintUpdated(userId, tenantId, complaintId, "Status changed to In Process");
+
 
 // Admin response added
-auditLoggingService.logAdminResponseUpdated(adminId, tenantId, complaintId, "Closed");
+
 
 // Authorization failure
-auditLoggingService.logAuthorizationFailure(userId, tenantId, "COMPLAINT_READ_CROSS_TENANT");
-
-// Login attempt
-auditLoggingService.logAuthenticationAttempt("admin", true); // Success
-auditLoggingService.logAuthenticationAttempt("admin", false); // Failed
-
-// Data export
-auditLoggingService.logDataExport(adminId, tenantId, "CSV", 150);
-```
-
-**Database Schema:**
-```sql
-CREATE TABLE audit_logs (
-    id BINARY(16) NOT NULL,
-    user_id INT NOT NULL,
-    tenant_id INT NOT NULL,
-    action_type VARCHAR(20) NOT NULL,
-    resource_type VARCHAR(50) NOT NULL,
-    target_resource_id BINARY(16),
-    description TEXT,
-    status VARCHAR(20) NOT NULL,
-    ip_address VARCHAR(45),
-    created_at DATETIME NOT NULL,
-    PRIMARY KEY (id),
-    INDEX idx_user_id (user_id),
-    INDEX idx_action_type (action_type),
-    INDEX idx_created_at (created_at),
-    INDEX idx_tenant_id (tenant_id)
-);
-```
 
 */
-@Entity
+@Entity //Db for audit logs
 @Table(name = "audit_logs", indexes = {
     @Index(name = "idx_user_id", columnList = "user_id"),
     @Index(name = "idx_action_type", columnList = "action_type"),
