@@ -24,7 +24,7 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         // Strength factor 12: balanced security and performance
-        return new BCryptPasswordEncoder(12);
+        return new BCryptPasswordEncoder(13);
     }
 
     /**
