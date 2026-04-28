@@ -11,12 +11,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * SECURITY FIX_004: Audit Log Repository
- * Weakness ID: Wk_004
- * Fix ID: Fix_004 – Structured Audit Logging Repository
- * D3FEND: D3-LM Logging and Monitoring
- */
+
 @Repository
 public interface AuditLogRepository extends JpaRepository<AuditLog, UUID> {
     
