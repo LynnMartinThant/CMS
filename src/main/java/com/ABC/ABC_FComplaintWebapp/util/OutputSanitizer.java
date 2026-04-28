@@ -16,8 +16,6 @@ import org.springframework.stereotype.Component;
  *
  * Implementation Details:
  * - Context-appropriate output encoding for HTML, JavaScript, URL, and CSS contexts
- * - Prevents XSS attacks by escaping special characters
- * - Applied to all complaint fields before rendering in web views
  * - Used in both template rendering and administrative interfaces
  */
 @Component
@@ -97,36 +95,7 @@ public class OutputSanitizer {
         return StringEscapeUtils.escapeHtml4(input);
     }
 
-    /**
-     * Strip HTML tags - removes all HTML/XML tags for plain text display
-     */
-    public static String stripHtmlTags(String input) {
-        if (input == null) {
-            return "";
-        }
-        return input.replaceAll("<[^>]*>", "");
-    }
-
-    /**
-     * Truncate and sanitize - safely truncate text and escape it
-     */
-    public static String sanitizeAndTruncate(String input, int maxLength) {
-        if (input == null) {
-            return "";
-        }
-        String truncated = input.length() > maxLength ? input.substring(0, maxLength) + "..." : input;
-        return escapeHtml(truncated);
-    }
-
-    /**
-     * Validate and sanitize complaint data - comprehensive sanitization for complaint fields
-     */
-    public static String sanitizeComplaintField(String input, String fieldType) {
-        if (input == null) {
-            return "";
-        }
-
-        String sanitized = input.trim();
+   
 
         // Size validation
         switch (fieldType) {
