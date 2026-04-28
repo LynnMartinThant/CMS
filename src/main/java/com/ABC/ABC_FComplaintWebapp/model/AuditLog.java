@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-/**
+/** 
  * SECURITY FIX_004: Audit Logging Model
  * Weakness ID: Wk_004
  * Fix ID: Fix_004 – Structured Audit Logging
