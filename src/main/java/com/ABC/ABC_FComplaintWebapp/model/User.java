@@ -31,9 +31,9 @@ import jakarta.validation.constraints.NotBlank;
  * - Adaptive work factor increases with computational improvements
  * 
  * Password Storage Contract:
- * ✓ hashedPassword field: stores ONLY BCrypt hashes ($2a$12$...)
+
  * ✓ Plain text: NEVER stored, NEVER logged, NEVER in memory longer than necessary
- * ✓ Comparison: Constant-time comparison via PasswordEncoder.matches()
+)
  * 
  * Proof of Implementation:
  * 1. SecurityConfig.java → BCryptPasswordEncoder(12) bean configuration
@@ -63,15 +63,13 @@ public class User {
 
     /**
      * SECURITY: Password field stores BCrypt-hashed passwords only.
-     * Never store plain text passwords.
-     * BCrypt format: $2a$12$... (algorithm$cost$salt+hash)
      */
-    @Column(nullable = false, length = 60)
-    @NotBlank(message = "Password is required")
+    @Column(nullable = false, length = 70)
+    @NotBlank(message = "Password is required") // hash
     private String hashedPassword;
 
     @Column(nullable = false)
-    private String role = "USER"; // USER, ADMIN, SUPER_ADMIN
+    private String role = "USER"; // role based 
 
     @Column(nullable = false)
     private Boolean active = true;
@@ -79,14 +77,10 @@ public class User {
     @Column(name = "last_login")
     private LocalDateTime lastLogin;
 
-    @Column(name = "password_last_changed", nullable = false)
-    private LocalDateTime passwordLastChanged = LocalDateTime.now();
 
-    @Column(name = "failed_login_attempts", nullable = false)
-    private Integer failedLoginAttempts = 0;
 
     @Column(name = "account_locked", nullable = false)
-    private Boolean accountLocked = false;
+    private Boolean accountLocked = false; 
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
