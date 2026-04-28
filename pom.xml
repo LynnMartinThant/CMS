@@ -53,14 +53,13 @@
 			<artifactId>spring-security-crypto</artifactId>
 		</dependency>
 
-		<!-- SECURITY FIX_002: HTML escaping for output sanitization -->
+		<!-- SECURITY FIX_002: output sanitization -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-text</artifactId>
 			<version>1.10.0</version>
 		</dependency>
 
-		<!-- UUID Utilities -->
 		<dependency>
 			<groupId>com.fasterxml.uuid</groupId>
 			<artifactId>java-uuid-generator</artifactId>
