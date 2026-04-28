@@ -48,10 +48,7 @@
 		</dependency>
 
 		<!-- SECURITY FIX_001: BCrypt for secure password hashing -->
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-crypto</artifactId>
-		</dependency>
+	
 
 		<!-- SECURITY FIX_002: output sanitization -->
 		<dependency>
